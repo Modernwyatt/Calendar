@@ -21,30 +21,27 @@ $(document).ready(function(){
 
 $('#date-today h6').text(moment().format('dddd') + ", " + moment().format('MMM Do YYYY, HH:mm:ss '));
 
+// get from localStorage the info to show 
+
 let counter = 1;
-for(const property in workDay){
+for(let property in workDay){
     let textEntry = "#text-entry" + counter;
     $(textEntry).text(workDay[property]);
+    
     let timeId = "#time" + counter;
     let presentHour= moment().hour();
     let timeString = $(timeId).text();
-    let timeNumber = (timeString);
-    // console.log(timeString)
-    // console.log(presentHour)
-    // console.log("timenumber", timeNumber)
-    // console.log(hourNumberFromHourString(timeNumber))
-   
-    for (let i=1; i<10; i++){
+    let timeNumber = hourNumberFromHourString(timeString);
+    console.log(timeNumber, "-", presentHour)
         if (timeNumber < presentHour){
-            $("#text-entry" + i).addClass("past-hour");
+            $(textEntry).addClass("past-hour");
         } else if (timeNumber > presentHour){
-            $("#text-entry" + i).addClass("future-hour");
+            $(textEntry).addClass("future-hour");
         } else {
-            $("#text-entry" + i).addClass("present-hour");
+            $(textEntry).addClass("present-hour");
         } 
+        counter ++;
     }
-    counter ++;
-}
 
 $("button").click(function(){
   value = $(this).siblings("textarea").val();
@@ -93,8 +90,9 @@ saveToLocalStorage(workHours);
 }
 
 function updateCalendarTasks(dayObject) {
-  $(".calendar-row").each(function(index){
-    let res = $(this).children("div");
-    $(this).children("textarea").text(dayObject[res.text()]);
+  $(".calendar-row").each(function(index,data){
+     let res = $(this).children("div");
+   console.log(this)
+    $(this).children("textarea").val(dayObject[res.text()]);
     })
 }
